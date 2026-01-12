@@ -15,7 +15,9 @@ logger = logging.getLogger("root")
 
 def monitor_get_strategy(request, biz_cc_id):
     client = BKMonitorClient(username=request.user.username)
-    response = client.search_alarm_strategy(bk_biz_id=biz_cc_id)
+    page = request.GET.get("page", 1)
+    page_size = request.GET.get("page_size", 10)
+    response = client.search_alarm_strategy_v3(bk_biz_id=biz_cc_id, page=page, page_size=page_size)
     if not response["result"]:
         message = _(
             f"请求策略失败: 请求[监控平台]的策略[ID: {biz_cc_id}]返回失败: {response['message']}.请重试, 如持续失败可联系管理员处理 | monitor_get_strategy"
